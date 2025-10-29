@@ -1,6 +1,6 @@
 import express from "express";
 import { addProduct, getProducts, getProduct, deleteProduct, updateProduct } from "./controllers/product.js";
-import { createCategory, getCategories, updateCategory, deleteCategory } from "./controllers/category.js";
+import { createCategory, getCategories, getCategory, updateCategory, deleteCategory } from "./controllers/category.js";
 const app = express();
 //Middleware
 app.use(express.json());
@@ -8,7 +8,7 @@ app.use(express.json());
 app.get("/categories", async (req, res) => {
     try {
         const categories = await getCategories();
-        if (!categories || categories.length == 0) {
+        if (!categories || categories.length === 0) {
             return res.status(404).json({ message: "No Categories Found" });
         }
         return res.status(200).json(categories);
@@ -32,7 +32,7 @@ app.post("/categories", async (req, res) => {
         return res.status(500).json({ message: "Something Went Wrong" });
     }
 });
-app.patch("/categories/:id", async (res, req) => {
+app.patch("/categories/:id", async (req, res) => {
     try {
         const { id } = req.params;
         const { categoryName } = req.body;
@@ -41,7 +41,7 @@ app.patch("/categories/:id", async (res, req) => {
         }
         ;
         const updatedCategory = await updateCategory(id, categoryName);
-        return res.status(201).json({ message: "Category Updated successfully", category: updatedCategory });
+        return res.status(200).json({ message: "Category Updated successfully", category: updatedCategory });
     }
     catch (error) {
         console.error("Database Error:", error);
@@ -55,10 +55,24 @@ app.delete("/categories/:id", async (req, res) => {
         if (!deletedCategory) {
             return res.status(404).json({ message: "Category Not Deleted" });
         }
-        return res.status(200).json({ message: "Category Deleted", deletedCategory });
+        return res.status(200).json({ message: "Category Deleted" });
     }
     catch (error) {
         console.log("Error deleting product:", error);
+        return res.status(500).json({ message: "Something Went Wrong" });
+    }
+});
+app.get("/categories/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+        const category = await getCategory(id);
+        if (!category) {
+            return res.status(404).json({ message: "Category not found" });
+        }
+        return res.status(200).json(category);
+    }
+    catch (error) {
+        console.error("Error fetching category:", error);
         return res.status(500).json({ message: "Something Went Wrong" });
     }
 });
@@ -66,7 +80,7 @@ app.delete("/categories/:id", async (req, res) => {
 app.get("/products", async (req, res) => {
     try {
         const products = await getProducts();
-        if (!products || products.length == 0) {
+        if (!products || products.length === 0) {
             return res.status(404).json({ message: "No Products Found" });
         }
         ;

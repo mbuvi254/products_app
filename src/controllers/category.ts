@@ -34,7 +34,7 @@ export async function getCategory(id:string){
     });
     if(!category){
         console.log("Category not found");
-        return;
+        return category;
     }
     console.log(category);
     }catch(error){

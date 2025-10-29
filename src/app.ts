@@ -12,7 +12,7 @@ app.use(express.json());
 app.get("/categories",async(req:Request,res:Response)=>{
     try{
         const categories = await getCategories();
-        if(!categories || categories.length==0 ){
+        if(!categories || categories.length===0 ){
             return res.status(404).json({message:"No Categories Found"});
         }
         return res.status(200).json(categories)
@@ -42,7 +42,7 @@ app.post("/categories",async (req :Request,res:Response)=>{
 
 
 
-app.patch("/categories/:id",async (res:Response,req:Request)=>{
+app.patch("/categories/:id",async (req:Request,res:Response)=>{
     try{
         const{id}=req.params;
         const{categoryName}=req.body
@@ -50,7 +50,7 @@ app.patch("/categories/:id",async (res:Response,req:Request)=>{
             return res.status(400).json({message:"Category Name is required"});
         };
         const updatedCategory=await updateCategory(id,categoryName);
-        return res.status(201).json({message:"Category Updated successfully",category:updatedCategory});
+        return res.status(200).json({message:"Category Updated successfully",category:updatedCategory});
     }
     catch(error){
         console.error("Database Error:",error);
@@ -67,7 +67,7 @@ app.delete("/categories/:id",async (req:Request,res:Response)=>{
         if(!deletedCategory){
             return res.status(404).json({message:"Category Not Deleted"});
         }
-        return res.status(200).json({message:"Category Deleted",deletedCategory});
+        return res.status(200).json({message:"Category Deleted"});
 
     }
     catch(error){
@@ -76,13 +76,28 @@ app.delete("/categories/:id",async (req:Request,res:Response)=>{
     }
 });
 
+app.get("/categories/:id",async (req:Request,res:Response)=>{
+    try{
+        const {id} =req.params;
+        const category = await getCategory(id);
+        if(!category){
+            return res.status(404).json({message:"Category not found"});
+        }
+        return res.status(200).json(category);
+    }catch(error){
+        console.error("Error fetching category:",error);
+        return res.status(500).json({message:"Something Went Wrong"});
+    }
+});
+
+
 
 //Products Endpoints
 app.get("/products",async (req:Request,res:Response)=>{
     try{
         const products = await getProducts();
      
-        if(!products || products.length==0){
+        if(!products || products.length===0){
             return res.status(404).json({message:"No Products Found"})
         };
         return res.status(200).json(products);
