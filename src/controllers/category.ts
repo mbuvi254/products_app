@@ -34,11 +34,14 @@ export async function getCategory(id:string){
     });
     if(!category){
         console.log("Category not found");
-        return category;
+      
     }
+    
     console.log(category);
+    return category;
     }catch(error){
         console.log("Error getting category",error);
+        throw error;
     }
 }
 
@@ -57,6 +60,7 @@ export async function updateCategory(id:string,categoryName:string ) {
     return updatedCategory;
     }catch(error){
         console.log("Error updating category",error);
+         throw error;
     }
 }
 
@@ -70,8 +74,9 @@ export async function deleteCategory(id:string) {
         }
     });
     console.log(deletedCategory);
-    return deleteCategory;
+    return deletedCategory;
     }catch(error){
         console.log("Error deleting Category",error);
+        throw error
     }   
 }
