@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "esModuleInterop": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "sourceMap": true
+  },
+  // Files for compilation
+  "include": ["src/**/*.ts", "src/controllers/product.mjs", "src/controllers/product.js"],
+  "exclude": ["node_modules", "dist"]
+}
